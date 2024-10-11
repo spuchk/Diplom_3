@@ -1,21 +1,49 @@
 
-import com.codeborne.selenide.Configuration;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
+import org.junit.Test;
+import org.junit.After;
 
-import static com.codeborne.selenide.WebDriverRunner.setWebDriver;
+import java.util.concurrent.TimeUnit;
 
 public class BaseTest {
+    public  WebDriver driver;
+    public static final String BROWSER_NAME_ENV_VARIABLE = "BROWSER_NAME";
+    enum Browser {
+        CHROME,YANDEX
+    }
 
-    public void optionBrowser(String browser) {
-        if ("yandex".equals(browser)) {
-            System.setProperty("webdriver.chrome.driver", "C:\\Users\\5G\\chromedriver-win64");
-            Configuration.browser = "chrome";
-            ChromeOptions options = new ChromeOptions();
-            options.setBinary("C:\\Users\\5G\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe");
-            WebDriver webDriver = new ChromeDriver(options);
-            setWebDriver(webDriver);
+    WebDriver getWebDriver(Browser browser) {
+        switch (browser) {
+            case CHROME:
+                System.setProperty("webdriver.chrome.driver", "src/main/resources/chromedriver.exe");
+                return new ChromeDriver();
+            case YANDEX:
+                System.setProperty("webdriver.chrome.driver", "src/main/resources/yandex");
+                return new ChromeDriver();
+            default:
+                throw new RuntimeException("unable to create web driver");
         }
     }
+    // Браузер для тестов
+    @Test
+    public void setUp() {
+        String browserName = System.getenv(BROWSER_NAME_ENV_VARIABLE);
+        driver = getWebDriver(Browser.valueOf(browserName));
+
+
+
+
+        driver.manage().window().maximize();
+        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+    }
+    // Закрыть браузер
+    @After
+    public void tearDown() {
+        if(driver != null){
+            driver.quit();
+        }
+    }
+
 }

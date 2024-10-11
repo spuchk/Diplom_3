@@ -1,19 +1,20 @@
-import com.codeborne.selenide.Configuration;
+
 import com.codeborne.selenide.Selenide;
 import io.qameta.allure.junit4.DisplayName;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import PageObject.MainPage;
+import pageobject.MainPage;
 
 @DisplayName("Проверить  переход к разделам")
 public class RedirectionTest extends BaseTest{
 
     @Before
     public void setUp() {
-        Configuration.headless = true;
-        optionBrowser("chrome");
-        Selenide.open("https://stellarburgers.nomoreparties.site/");
+        String browserName = System.getenv(BROWSER_NAME_ENV_VARIABLE);
+
+        driver = getWebDriver(Browser.valueOf(browserName));
+        Selenide.open(Url.URL_BASE);
     }
     @Test
     @DisplayName("Проверить переход на вкладку Булки")

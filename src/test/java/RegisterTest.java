@@ -1,12 +1,12 @@
-import com.codeborne.selenide.Configuration;
+
 import com.codeborne.selenide.Selenide;
 import io.qameta.allure.junit4.DisplayName;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import PageObject.LoginPage;
-import PageObject.MainPage;
-import PageObject.RegisterPage;
+import pageobject.LoginPage;
+import pageobject.MainPage;
+import pageobject.RegisterPage;
 
 
 
@@ -17,9 +17,10 @@ public class RegisterTest extends BaseTest {
     private boolean createUser;
     @Before
     public void setUp() {
-        Configuration.headless = false;
-        optionBrowser("chrome");
-        Selenide.open("https://stellarburgers.nomoreparties.site/");
+        String browserName = System.getenv(BROWSER_NAME_ENV_VARIABLE);
+
+        driver = getWebDriver(Browser.valueOf(browserName));
+        Selenide.open(Url.URL_BASE);
         new MainPage().clickPersonalAccountButton();
         new LoginPage().clickRegistrationLink();
     }

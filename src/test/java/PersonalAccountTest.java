@@ -1,13 +1,13 @@
 
-import com.codeborne.selenide.Configuration;
+
 import com.codeborne.selenide.Selenide;
 import io.qameta.allure.junit4.DisplayName;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import PageObject.AccountPage;
-import PageObject.LoginPage;
-import PageObject.MainPage;
+import pageobject.AccountPage;
+import pageobject.LoginPage;
+import pageobject.MainPage;
 
 
 
@@ -19,8 +19,9 @@ public class PersonalAccountTest extends BaseTest {
 
     @Before
     public void setUp() {
-        Configuration.headless = true;
-        optionBrowser("chrome");
+        String browserName = System.getenv(BROWSER_NAME_ENV_VARIABLE);
+
+        driver = getWebDriver(Browser.valueOf(browserName));
         user = UserData.defaultUserData();
         registrationUser.registrationUser();
     }
@@ -28,7 +29,7 @@ public class PersonalAccountTest extends BaseTest {
     @Test
     @DisplayName("Проверить переход по клику на Личный кабинет")
     public void loginPersonalAccount() {
-        Selenide.open("https://stellarburgers.nomoreparties.site/login");
+        Selenide.open(Url.URL_LOGIN);
         new LoginPage()
                 .setEmail(user.getEmail())
                 .setPassword(user.getPassword())
@@ -41,7 +42,7 @@ public class PersonalAccountTest extends BaseTest {
     @Test
     @DisplayName("Проверить переход по клику на Конструктор")
     public void transitionToConstructor() {
-        Selenide.open("https://stellarburgers.nomoreparties.site/login");
+        Selenide.open(Url.URL_LOGIN);
         new LoginPage()
                 .setEmail(user.getEmail())
                 .setPassword(user.getPassword())
@@ -55,7 +56,7 @@ public class PersonalAccountTest extends BaseTest {
     @Test
     @DisplayName("Проверить переход по клику на Stellar Burgers")
     public void transitionToLogo() {
-        Selenide.open("https://stellarburgers.nomoreparties.site/login");
+        Selenide.open(Url.URL_LOGIN);
         new LoginPage()
                 .setEmail(user.getEmail())
                 .setPassword(user.getPassword())
@@ -69,7 +70,7 @@ public class PersonalAccountTest extends BaseTest {
     @Test
     @DisplayName("Проверить выход по кнопке Выйти в личном кабинете")
     public void exitFromPersonalAccount() {
-        Selenide.open("https://stellarburgers.nomoreparties.site/login");
+        Selenide.open(Url.URL_LOGIN);
         new LoginPage()
                 .setEmail(user.getEmail())
                 .setPassword(user.getPassword())
